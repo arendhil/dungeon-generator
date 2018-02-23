@@ -47,13 +47,13 @@ class DefaultRoomPlacer(RoomPlacer):
         tile = map_grid[rx+dx][ry+dy]
         tile.room_id = room_id
         tile.occupation = ROOM
-        if (dx < size[0]):
+        if (dx < size[0] -1 ):
           tile.passages |= PASSAGE_RIGHT
         if (dx > 0):
           tile.passages |= PASSAGE_LEFT
         if (dy > 0):
           tile.passages |= PASSAGE_UP
-        if (dy < size[1]):
+        if (dy < size[1]-1):
           tile.passages |= PASSAGE_DOWN
         tiles.append(tile)
     room = Room(room_id, tiles)

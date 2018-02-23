@@ -55,19 +55,32 @@ class Room:
             self.border.append((tile, next_tile, i)) #room_tile, outside_tile, DIRECTION
             if not (next_tile.room_id in self.border_rooms):
               self.border_rooms.append(next_tile.room_id)
-    print("Room %i has %i neighbours"%(self.room_id,len(self.border_rooms)))
 
   def open_doors(self):
-    while len(self.border) > 0:
-      border_tile = self.border[randint(0,len(self.border)-1)]
-      border_tile[0].passages |= DIRECTION[border_tile[2]]
-      border_tile[1].passages |= OPOSITE_DIRECTION[border_tile[2]]
+    reduced_border = []
+    #First, look for borders that are not borders anymore - door already openned
+    for tile in self.border:
+      if (tile[0].doors != DOOR_NONE):
+        #found a door, therefore a connection to another room
+        if not (tile[1].room_id in self.connected_rooms):
+          self.connected_rooms.append(tile[1].room_id)
+
+    #create a border set with only the not yet connected.
+    for tile in self.border:
+      if not (tile[1].room_id in self.connected_rooms):
+        reduced_border.append(tile)
+
+    while len(reduced_border) > 0:
+      border_tile = reduced_border[randint(0,len(reduced_border)-1)]
+      border_tile[0].doors |= DIRECTION[border_tile[2]]
+      border_tile[1].doors |= OPOSITE_DIRECTION[border_tile[2]]
       new_border = []
-      for tile in self.border:
-        if (tile[0].room_id != border_tile[0].room_id):
+      for tile in reduced_border:
+        if (tile[1].room_id != border_tile[1].room_id):
           new_border.append(tile)
-      self.border = new_border
+      reduced_border = new_border
       self.connected_rooms.append(border_tile[1].room_id)
+    #print( (self.room_id, len(self.border_rooms), len(self.connected_rooms) ) )
 
   def is_inside(pos, grid):
     return ( (pos[0] >= 0) and (pos[1] >= 0) and \

@@ -31,10 +31,16 @@ def draw_tile(tile):
       pygame.draw.rect(DISPLAYSURF, SHUFFLES_CORRIDOR[tile.room_id % len(SHUFFLES)], (tile.x * GRID_SIZE, tile.y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
     if (tile.passages&PASSAGE_LEFT == 0):
-      pygame.draw.line(DISPLAYSURF, BLACK, (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1), (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1 + GRID_SIZE), 1)
+      if (tile.doors&DOOR_LEFT != 0):
+        pygame.draw.line(DISPLAYSURF, WHITE, (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1), (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1 + GRID_SIZE), 1)
+      else:
+        pygame.draw.line(DISPLAYSURF, BLACK, (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1), (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1 + GRID_SIZE), 1)
 
     if (tile.passages&PASSAGE_UP == 0):
-      pygame.draw.line(DISPLAYSURF, BLACK, (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1), (tile.x * GRID_SIZE -1 + GRID_SIZE, tile.y * GRID_SIZE -1), 1)
+      if (tile.doors&DOOR_UP != 0):
+        pygame.draw.line(DISPLAYSURF, WHITE, (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1), (tile.x * GRID_SIZE -1 + GRID_SIZE, tile.y * GRID_SIZE -1), 1)
+      else:
+        pygame.draw.line(DISPLAYSURF, BLACK, (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1), (tile.x * GRID_SIZE -1 + GRID_SIZE, tile.y * GRID_SIZE -1), 1)
 
 
 pygame.init()
