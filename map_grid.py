@@ -3,13 +3,15 @@
 from support import *
 from maze_generator import *
 from room_placer import *
+from clean_maze import *
 
 class MapGrid:
   
-  def __init__(self, size, rooms_amount):
+  def __init__(self, size, rooms_amount, clean_amount):
     self.__size = size
     self.__rooms = []
     self.__corridors = []
+    self.clean_amount = clean_amount
     self.generate_grid()
     self.create_maze(rooms_amount)
     self.close_and_clean_maze()
@@ -41,6 +43,8 @@ class MapGrid:
     for room in self.__rooms:
       room.close_room(self.__grid)
       room.open_doors()
+    #cleaner = CleanMaze()
+    #cleaner.clean(self, self.clean_amount)
 
   def get_grid(self):
     return self.__grid

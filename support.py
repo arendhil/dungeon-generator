@@ -3,6 +3,7 @@ EMPTY = 0
 WALL = 1
 CORRIDOR = 2
 ROOM = 3
+DEBUG = 999
 
 DOOR_NONE = 0
 DOOR_UP = 1
@@ -20,7 +21,19 @@ DIRECTION = [PASSAGE_UP, PASSAGE_RIGHT, PASSAGE_DOWN, PASSAGE_LEFT] ## N, E, S, 
 OPOSITE_DIRECTION = [PASSAGE_DOWN, PASSAGE_LEFT, PASSAGE_UP, PASSAGE_RIGHT]
 DELTA = [(0,-1), (1, 0), (0, 1), (-1, 0)]
 
+BIFURCATION = [7, 11, 13, 14, 15] #1110, 1101, 1011, 0111, 1111
+CORRIDORS = [3, 5, 9, 6, 10, 12] #1100, 1010, 1001, 0110, 0101, 0011
+DEAD_ENDS = [0, 1, 2, 4, 8] #0000, 1000, 0100, 0010, 0001
+
 from random import randint
+
+def get_direction_int(delta):
+  for i in range(len(DELTA)):
+    if (DELTA[i][0] == delta[0]) and (DELTA[i][1] == delta[1]):
+      return i
+
+  print("Could not reach a veredict with ",delta)
+  return -1
 
 class Tile:
   def __init__(self,x,y, map_grid):
@@ -34,6 +47,13 @@ class Tile:
 
   def __str__(self):
     print(str(self.occupation)+" - doors: "+str(self.doors))
+
+  def make_wall(self):
+    # self.occupation = DEBUG
+    self.occupation = WALL
+    self.room_id = -1
+    self.passages = PASSAGE_NONE
+    self.doors = DOOR_NONE
 
 class Room:
   def __init__(self, room_id, tiles):
