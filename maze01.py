@@ -4,17 +4,6 @@ from pygame.locals import *
 from map_grid import *
 
 sys.setrecursionlimit(15000)
-SCREEN_SIZE = (400,400)
-WHITE = (255,255,255)
-BLACK = (0,0,0)
-WALL_COLOR = (160,160,160)
-
-SHUFFLES = ( (186,186,215), (200,200,215), (160,160,215), (145,145,215), (125,125,215), (115,115,215), (95,95,215), (80,80,215) )
-SHUFFLES_CORRIDOR = ( (215,125,26), (215,125,45), (215,125,60), (215,125,15), (215,125,80), (215,125,75), (215,125,95), (215,125,110) )
-
-GRID_SIZE = 10
-ROOMS_AMOUNT = 50
-CLEAN_INTERACTION = 5
 
 
 def draw_grid(grid):
@@ -31,7 +20,7 @@ def draw_tile(tile):
     elif (tile.occupation == CORRIDOR):
       pygame.draw.rect(DISPLAYSURF, SHUFFLES_CORRIDOR[tile.room_id % len(SHUFFLES)], (tile.x * GRID_SIZE, tile.y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
     elif (tile.occupation == DEBUG):
-      pygame.draw.rect(DISPLAYSURF, (255,180,180), (tile.x * GRID_SIZE, tile.y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+      pygame.draw.rect(DISPLAYSURF, SHUFFLES_CLEAN[tile.room_id % len(SHUFFLES_CLEAN)], (tile.x * GRID_SIZE, tile.y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
 
     if (tile.passages&PASSAGE_LEFT == 0):
       if (tile.doors&DOOR_LEFT != 0):

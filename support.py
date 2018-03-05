@@ -1,4 +1,17 @@
 #!/usr/bin/env python
+SCREEN_SIZE = (600,600)
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+WALL_COLOR = BLACK
+
+SHUFFLES = ( (186,186,215), (200,200,215), (160,160,215), (145,145,215), (125,125,215), (115,115,215), (95,95,215), (80,80,215) )
+SHUFFLES_CORRIDOR = ( (215,125,26), (215,125,45), (215,125,60), (215,125,15), (215,125,80), (215,125,75), (215,125,95), (215,125,110) )
+SHUFFLES_CLEAN = ( (20, 20, 20), (50, 20, 20), (15, 20, 20), (86, 20, 20), (125, 20, 20), (35, 20, 20), (86, 25, 25), (86, 50, 50), (50, 50, 50) )
+
+GRID_SIZE = 15
+ROOMS_AMOUNT = 50
+CLEAN_INTERACTION = 10
+
 EMPTY = 0
 WALL = 1
 CORRIDOR = 2
@@ -17,6 +30,7 @@ PASSAGE_RIGHT = 2
 PASSAGE_DOWN = 4
 PASSAGE_LEFT = 8
 
+DOORS = [DOOR_UP, DOOR_RIGHT, DOOR_DOWN, DOOR_LEFT]
 DIRECTION = [PASSAGE_UP, PASSAGE_RIGHT, PASSAGE_DOWN, PASSAGE_LEFT] ## N, E, S, W
 OPOSITE_DIRECTION = [PASSAGE_DOWN, PASSAGE_LEFT, PASSAGE_UP, PASSAGE_RIGHT]
 DELTA = [(0,-1), (1, 0), (0, 1), (-1, 0)]
@@ -49,7 +63,7 @@ class Tile:
     print(str(self.occupation)+" - doors: "+str(self.doors))
 
   def make_wall(self):
-    # self.occupation = DEBUG
+    #self.occupation = DEBUG
     self.occupation = WALL
     self.room_id = -1
     self.passages = PASSAGE_NONE
@@ -80,7 +94,7 @@ class Room:
     reduced_border = []
     #First, look for borders that are not borders anymore - door already openned
     for tile in self.border:
-      if (tile[0].doors != DOOR_NONE):
+      if (tile[0].doors&DOORS[tile[2]] != 0):
         #found a door, therefore a connection to another room
         if not (tile[1].room_id in self.connected_rooms):
           self.connected_rooms.append(tile[1].room_id)

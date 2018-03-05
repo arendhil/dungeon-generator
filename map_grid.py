@@ -11,6 +11,7 @@ class MapGrid:
     self.__size = size
     self.__rooms = []
     self.__corridors = []
+    #self.cleanness = []
     self.clean_amount = clean_amount
     self.generate_grid()
     self.create_maze(rooms_amount)
@@ -19,9 +20,9 @@ class MapGrid:
   def generate_grid(self):
     # start with a blank grid
     self.__grid = []
-    for x in range(self.__size[0]//10):
+    for x in range(self.__size[0]//GRID_SIZE):
       line = []
-      for y in range(self.__size[1]//10):
+      for y in range(self.__size[1]//GRID_SIZE):
         new_tile = Tile(x,y, self)
         line += [new_tile]
       self.__grid += [line]
@@ -43,8 +44,8 @@ class MapGrid:
     for room in self.__rooms:
       room.close_room(self.__grid)
       room.open_doors()
-    #cleaner = CleanMaze()
-    #cleaner.clean(self, self.clean_amount)
+    cleaner = CleanMaze()
+    cleaner.clean(self, self.clean_amount)
 
   def get_grid(self):
     return self.__grid
