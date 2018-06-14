@@ -6,6 +6,9 @@ from room_placer import *
 from clean_maze import *
 
 class MapGrid:
+
+  def get_size(self):
+    return self.__size
   
   def __init__(self, size, rooms_amount, clean_amount):
     self.__size = size
@@ -27,6 +30,76 @@ class MapGrid:
         line += [new_tile]
       self.__grid += [line]
 
+  def full_grid(self):
+    ## 0 - Empty
+    ## 1 - ground
+    ## 2 - wall
+    ## 3 - door
+    ## Zerar a grid a retornar
+    grid = [ [ 0 for y in range((self.__size[1]*2)//GRID_SIZE)] for x in range((self.__size[0]*2)//GRID_SIZE)]
+    
+    for x in range(self.__size[0]//GRID_SIZE):
+      for y in range(self.__size[1]//GRID_SIZE):
+        ## Montar a máscara
+        mask = [ [0 for i in range(3)] for j in range(3)]
+        tile = self.__grid[x][y]
+        if tile.occupation != WALL:
+          ## if it is not a wall, the center is accessible
+          grid[x*2+1][y*2+1] = 1
+          if tile.occupation == CORRIDOR:
+            if (tile.passages&PASSAGE_LEFT) != 0:
+              grid[x*2][y*2+1] = 1
+            if (tile.passages&PASSAGE_UP) != 0:
+              grid[x*2+1][y*2] = 1
+            if (tile.passages&PASSAGE_RIGHT) != 0:
+              grid[x*2+2][y*2+1] = 1
+            if (tile.passages&PASSAGE_DOWN) != 0:
+              grid[x*2+1][y*2+2] = 1
+              mask[1][2] = 1
+          else:
+            ## if this is a room, cover with ground first
+            for i in range(3):
+              for j in range(3):
+                if grid[x*2+i][y*2+j] == 0:
+                  grid[x*2+i][y*2+j] = 1
+            mask = [ [1 for i in range(3)] for j in range(3)]
+
+            ##Now, place the wall
+            if (tile.passages&PASSAGE_LEFT) == 0:
+              grid[x*2][y*2+0] = 2
+              grid[x*2][y*2+1] = 2
+              grid[x*2][y*2+2] = 2
+            if (tile.passages&PASSAGE_UP) == 0:
+              grid[x*2+0][y*2+0] = 2
+              grid[x*2+1][y*2+0] = 2
+              grid[x*2+2][y*2+0] = 2
+            if (tile.passages&PASSAGE_RIGHT) == 0:
+              grid[x*2+2][y*2+0] = 2
+              grid[x*2+2][y*2+1] = 2
+              grid[x*2+2][y*2+2] = 2
+            if (tile.passages&PASSAGE_DOWN) == 0:
+              grid[x*2+0][y*2+2] = 2
+              grid[x*2+1][y*2+2] = 2
+              grid[x*2+2][y*2+2] = 2
+
+            ## if this tile has a door, override the correspondent wall tile
+            if (tile.doors != 0):
+              if (tile.doors&DOOR_LEFT) != 0:
+                grid[x*2][y*2+1] = 3
+              if (tile.doors&DOOR_UP) != 0:
+                grid[x*2+1][y*2+0] = 3
+              if (tile.doors&DOOR_RIGHT) != 0:
+                grid[x*2+2][y*2+1] = 3
+              if (tile.doors&DOOR_DOWN) != 0:
+                grid[x*2+1][y*2+2] = 3
+          
+        ## Aplicar a máscara do Tile na grid
+        # for xi in range(3):
+        #   for yi in range(3):
+        #     grid[x*2+xi][y*2+yi] += mask[xi][yi]
+    return grid
+
+    
   def create_maze(self, rooms_amount):
     roomsPlacer = DefaultRoomPlacer()
     rooms_odds = ((0.2,(3,3)), (0.3, (4,3)), (0.3,(3,4)), (0.2,(2,2)))

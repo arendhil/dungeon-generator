@@ -5,7 +5,7 @@ import random as rand
 
 class MazeGenerator:
 
-  def generate(map_grid):
+  def generate(self, map_grid, tiles_list, start_id):
     pass
 
 
@@ -40,4 +40,6 @@ class RecursiveBacktrackerMaze(MazeGenerator):
         self._walk_through(map_grid, new_tile, corridor)
 
 
-
+class DirectConnection(MazeGenerator):
+  def generate(self, map_grid, tiles_list, start_id):
+    pass

@@ -46,6 +46,14 @@ def draw_tile(tile):
       else:
         pygame.draw.line(DISPLAYSURF, BLACK, (tile.x * GRID_SIZE -1, tile.y * GRID_SIZE -1 + GRID_SIZE), (tile.x * GRID_SIZE -1 + GRID_SIZE, tile.y * GRID_SIZE -1 + GRID_SIZE), 1)
 
+def save_map(map):
+  import json
+  simple_map = {'screen_size': map.get_size()}
+  simple_map["grid"] = map.full_grid()
+  
+  with open("save_map.json","w") as fdp:
+    fdp.write(json.dumps(simple_map))
+
 
 pygame.init()
 DISPLAYSURF = pygame.display.set_mode(SCREEN_SIZE)
@@ -61,6 +69,8 @@ while True: #main loop
     if (event.type == pygame.KEYDOWN):
       if (event.key == pygame.K_SPACE):
         map = MapGrid(SCREEN_SIZE, ROOMS_AMOUNT, CLEAN_INTERACTION)
+      if (event.key == pygame.K_s):
+        save_map(map)
     if (event.type == pygame.MOUSEBUTTONDOWN):
       click_pos = event.pos
       click_pos = (click_pos[0]//GRID_SIZE, click_pos[1]//GRID_SIZE)
