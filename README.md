@@ -1,7 +1,9 @@
 # dungeon-generator
 Simple dungeon/maze generator in python.
 
-This is an Dungeon/Maze generation algorithm.
+This is an Dungeon/Maze generation algorithm based on some of these algorithms:
+- http://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/
+- http://www.astrolog.org/labyrnth/algrithm.htm
 
 All can be executed through:
 <code>
