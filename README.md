@@ -14,6 +14,9 @@ All you need is:
 - Python 3.4+
 - Pygame
 
+To install all requirements with pip user:
+`pip install -r REQUIREMENTS`
+
 maze_generator.py - has the algorithms for generating the maze part (for now there is only the Recursive Backtracker)
 
 room_placer.py - has the algorithms for placing rooms
